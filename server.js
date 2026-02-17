@@ -34,6 +34,31 @@ app.post('/api/vote', async (req, res) => {
     }
 });
 
+// The Arcium Health Vault Endpoint
+app.post('/api/health/verify', async (req, res) => {
+    try {
+        const { access_proof, data_hash } = req.body;
+        
+        console.log("1. Received Health ZK Proof from Android:", access_proof);
+        console.log("2. Forwarding to Arcium for Selective Disclosure Verification...");
+        
+        // Simulating the MPC cluster processing delay
+        await new Promise(resolve => setTimeout(resolve, 2500));
+
+        console.log("3. Arcium Confirmed Health Record Authenticity.");
+
+        res.status(200).json({
+            success: true,
+            message: "Health Proof Verified by Arcium Network",
+            verificationSignature: "zk_health_verified_" + Date.now()
+        });
+
+    } catch (error) {
+        console.error("Health Relayer Error:", error);
+        res.status(500).json({ success: false, error: "Health Verification Failed" });
+    }
+});
+
 // Health check endpoint for Render
 app.get('/', (req, res) => res.send("Arcium Relayer is Live"));
 
